@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mi Mochila Emocional con Diario Personal</title>
+    <!-- Font Awesome para íconos sociales -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f0f0;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1,
+      h2 {
+        margin: 15px;
+      }
+
+      .diario {
+        border: 2px solid #333;
+        border-radius: 10px;
+        width: 95%;
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+      }
+
+      textarea {
+        width: 100%;
+        height: 80px;
+        margin: 10px 0;
+        display: block;
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .historial {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .historial p {
+        text-align: center;
+      }
+
+      footer {
+        margin-top: 20px;
+        padding: 15px;
+        background: linear-gradient(90deg, #0044cc, #007bff);
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .social-icons {
+        margin-top: 10px;
+      }
+
+      .social-icons a {
+        margin: 0 8px;
+        font-size: 22px;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+      }
+
+      /* Colores oficiales de cada red */
+      .fa-whatsapp {
+        color: #25d366;
+      }
+      .fa-instagram {
+        color: #e1306c;
+      }
+      .fa-facebook {
+        color: #1877f2;
+      }
+      .fa-youtube {
+        color: #ff0000;
+      }
+      .fa-twitter {
+        color: #1da1f2;
+      }
+
+      .social-icons a:hover {
+        transform: scale(1.2);
+      }
+
+      /* Ajustes para móviles */
+      @media (max-width: 600px) {
+        h1,
+        h2 {
+          font-size: 18px;
+        }
+        .diario {
+          padding: 15px;
+        }
+        footer {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Universidad Fidélitas, Primer cuatrimestre, 2026. Fundamentos de la
+      educación inclusiva.
+    </h1>
+    <h2>🎒 Mi Mochila Emocional con Diario Personal</h2>
+    <p>Escribe dentro de tu mochila:</p>
+
+    <div class="diario">
+      <h3>Emociones o preocupaciones</h3>
+      <textarea
+        id="emociones"
+        placeholder="Ej: miedo, estrés, inseguridad..."
+      ></textarea>
+
+      <h3>Fortalezas o apoyos</h3>
+      <textarea
+        id="apoyos"
+        placeholder="Ej: motivación, familia, amigos..."
+      ></textarea>
+
+      <button onclick="guardar()">Guardar</button>
+      <button onclick="reiniciar()">Reiniciar</button>
+    </div>
+
+    <div class="historial" id="historial"></div>
+
+    <footer>
+      ✨ Designed by: Josbrevar07. © 2026. All Rights Reserved</b> ✨
+      <div class="social-icons">
+        <a href="https://walink.co/341b8e" title="WhatsApp"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+        <a href="https://www.instagram.com/josbrevar07/" title="Instagram"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a href="https://www.facebook.com/josue.brenesvargas" title="Facebook"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a href="https://www.youtube.com/@josbrevar0773" title="YouTube"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a
+          href="https://clases-de-manejo-personalizadas.com/"
+          title="Página web de clases de manejo personalizadas"
+          ><i class="fab fa-chrome"></i
+        ></a>
+      </div>
+      <strong
+          >Ejercicio en línea creado y diseñado en Santiago de Puriscal, San José, Costa Rica.</strong
+          >
+    </footer>
+
+    <script>
+      // Cargar historial al inicio
+      let diario = JSON.parse(localStorage.getItem("diario")) || [];
+      mostrarHistorial();
+
+      function guardar() {
+        let emociones = document.getElementById("emociones").value;
+        let apoyos = document.getElementById("apoyos").value;
+        if (emociones.trim() === "" && apoyos.trim() === "") {
+          return alert("Escribe algo primero.");
+        }
+
+        let fecha = new Date().toLocaleString();
+        diario.push({ fecha, emociones, apoyos });
+        localStorage.setItem("diario", JSON.stringify(diario));
+
+        document.getElementById("emociones").value = "";
+        document.getElementById("apoyos").value = "";
+        mostrarHistorial();
+      }
+
+      function reiniciar() {
+        if (confirm("¿Seguro que quieres reiniciar tu diario?")) {
+          diario = [];
+          localStorage.removeItem("diario");
+          mostrarHistorial();
+        }
+      }
+
+      function mostrarHistorial() {
+        let cont = document.getElementById("historial");
+        if (diario.length === 0) {
+          cont.innerHTML = "<p>No hay entradas guardadas aún.</p>";
+          return;
+        }
+        cont.innerHTML =
+          "<h3>Historial de entradas:</h3>" +
+          diario
+            .map(
+              (d) =>
+                `<p><b>${d.fecha}</b><br>Emociones: ${d.emociones}<br>Apoyos: ${d.apoyos}</p>`,
+            )
+            .join("<hr>");
+      }
+    </script>
+  </body>
+</html>
